@@ -49,8 +49,6 @@ int main(void)
 		mvaddch(i, num_cols - 1, ACS_BLOCK);
 	}
 
-
-
 	//refresh tells curses to draw everything
 
 	//END OF PROGRAM LOGIC GOES HERE
