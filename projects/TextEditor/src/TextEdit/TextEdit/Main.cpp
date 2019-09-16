@@ -5,10 +5,14 @@
 #include <time.h>
 #include <cstring>
 #include <string>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
 void PrintTabs(const char* tabs[], WINDOW* winptr);
+
+void PrintError(string error, WINDOW* winptr);
 
 int main(void)
 {
@@ -51,10 +55,11 @@ int main(void)
 	attron(COLOR_PAIR(1));
 
 	//Setting up boarders
-	mvaddch(1, 2, ACS_BSSB);						//inner corner boarders
+	mvaddch(1, 2, ACS_BSSB);						//inner corner boarders top left around
 	mvaddch(1, num_cols - 3, ACS_BBSS);  
 	mvaddch(num_rows - 2, num_cols - 3, ACS_SBBS);
-	mvaddch(num_rows - 2, 3,ACS_BBSS);
+	mvaddch(num_rows - 2, 2, ACS_SSBB);
+	//ACS_SBSB left and right inner boarder
 	for (int i = 0; i < num_cols; i++)
 	{
 		//top row
@@ -100,6 +105,26 @@ int main(void)
 
 	PrintTabs(tabs, main_window);
 	
+	//now playing with files
+
+	//check to see if it is open
+	ofstream myfile;
+	myfile.open("shrek.txt");
+	if (myfile.is_open())
+	{
+		mvwprintw(main_window, 10, 10, "Hello");/*
+		char c;
+			while (myfile.get(c))
+			{
+				mvwprintw(main_window, 15, 15, "Hello");
+			}*/
+	}
+	else
+	{
+		PrintError("file/open", main_window);
+	}
+
+
 	//refresh tells curses to draw everything
 
 	//END OF PROGRAM LOGIC GOES HERE
@@ -130,4 +155,13 @@ void PrintTabs(const char* tabs[], WINDOW* winptr)
 	}
 	attroff(COLOR_PAIR(2));
 	attroff(A_BOLD | A_BLINK);
+}
+
+void PrintError(string error, WINDOW* winptr)
+{
+	if (error == "color/support")
+		mvwprintw(winptr, 15, 15, "The Terminal Does Not Support Color");
+	else if (error == "file/open")
+		mvwprintw(winptr, 15, 15, "The file could not open");
+
 }
