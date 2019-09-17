@@ -14,7 +14,7 @@ void PrintTabs(const char* tabs[], WINDOW* winptr);
 
 void PrintError(string error, WINDOW* winptr);
 
-int main(void)
+int main()
 {
 	WINDOW* main_window = nullptr;
 	int num_cols = 0;
@@ -106,18 +106,20 @@ int main(void)
 	PrintTabs(tabs, main_window);
 	
 	//now playing with files
-
+	int maxlength = 202;
+	int counter = 2;
+	char file[202];
 	//check to see if it is open
 	ofstream myfile;
 	myfile.open("shrek.txt");
 	if (myfile.is_open())
 	{
-		mvwprintw(main_window, 10, 10, "Hello");/*
-		char c;
-			while (myfile.get(c))
+		mvwprintw(main_window, 10, 202, "Hello");
+			for (int i =2; i < maxlength; i++)
 			{
-				mvwprintw(main_window, 15, 15, "Hello");
-			}*/
+				myfile >> file;
+
+			}
 	}
 	else
 	{
