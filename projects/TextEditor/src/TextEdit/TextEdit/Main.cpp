@@ -7,12 +7,18 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
 void PrintTabs(const char* tabs[], WINDOW* winptr);
 
 void PrintError(string error, WINDOW* winptr);
+
+void PrintFile(vector<char> lines, WINDOW* winptr);
+
+void CheckFile(string file, WINDOW* winptr);
+
 
 int main()
 {
@@ -41,7 +47,8 @@ int main()
 
 	//MAIN PROGRAM LOGIC GOES HERE
 	
-	//Turning color 
+	//Turning color
+	
 	if (has_colors() == FALSE)
 	{
 		endwin();
@@ -49,7 +56,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 	start_color();
-
+	
 	//Picking color for columns
 	init_pair(1, COLOR_BLUE, COLOR_WHITE);
 	attron(COLOR_PAIR(1));
@@ -90,6 +97,7 @@ int main()
 	attron(A_BOLD | A_BLINK);
 
 	//Text windows
+
 	string file = "File";				//string declaration
 	string edit = "Edit";
 	string options = "Options";
@@ -106,27 +114,13 @@ int main()
 	PrintTabs(tabs, main_window);
 	
 	//now playing with files
-	int maxlength = 202;
-	int counter = 2;
-	char file[202];
-	//check to see if it is open
-	ofstream myfile;
-	myfile.open("shrek.txt");
-	if (myfile.is_open())
-	{
-		mvwprintw(main_window, 10, 202, "Hello");
-			for (int i =2; i < maxlength; i++)
-			{
-				myfile >> file;
-
-			}
-	}
-	else
-	{
-		PrintError("file/open", main_window);
-	}
-
-
+	
+	typedef vector<char> Lines;
+	Lines lines;
+	
+	//check to see if it is open (can be made to a function)
+	CheckFile("Text.txt", main_window);
+	
 	//refresh tells curses to draw everything
 
 	//END OF PROGRAM LOGIC GOES HERE
@@ -166,4 +160,61 @@ void PrintError(string error, WINDOW* winptr)
 	else if (error == "file/open")
 		mvwprintw(winptr, 15, 15, "The file could not open");
 
+}
+
+void PrintFile(vector<char> lines, WINDOW* winptr)
+{
+	typedef vector<char> Lines;
+	int maxlength = 205;
+	int loop_counter = 0;
+	int counter_len = 3;
+	int counter_row = 3;
+
+	for (Lines::const_iterator i = lines.begin(); i != lines.end(); ++i)
+	{
+		if (loop_counter < maxlength)//looking at the wrong thing
+		{
+			mvaddch(counter_row, counter_len, *i);
+			counter_len++;
+			loop_counter++;
+		}
+		else
+		{
+			counter_row++;
+			counter_len = 3;
+			loop_counter = 0;
+			mvaddch(counter_row, counter_len, *i);
+			i--;
+		}
+		
+	}
+}
+
+void CheckFile(string file, WINDOW* winptr)
+{ // use getline to push into a temp place holder then push in into the vector
+	typedef vector<char> Doc;
+	char ch;
+	Doc doc;
+	string line;
+	ifstream myfile;
+	myfile.open(file);
+
+	if (myfile.is_open())
+	{
+		while (!myfile.eof())
+		{
+			getline(myfile, line);
+			for (int i = 0; i < line.length(); i++)
+			{
+				doc.push_back(line.at(i));
+			}
+		}
+	}
+	else
+	{
+		PrintError("file/open", winptr);
+	}
+
+	myfile.close();
+	PrintFile(doc, winptr);
 }

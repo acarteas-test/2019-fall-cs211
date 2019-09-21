@@ -1,0 +1,18 @@
+    Working on outputting from file
+So char is not allowed to be in in mvwprintw since it is not a constant
+In the else to check if it is open add a function that will return an error for what the problem is
+        Have a function that takes in the name of the issue and creates a panel to output             on
+        Too difficult to include to panel right now will get back to it but will still create an         error function for an easier job in the future
+Tried modifying print tabs so that it uses a vector but it proved to be too hard
+Instead I’m using a vector to hold all the chars from a file and then output them on the screen with a word wrap
+I can now output to the screen but with two issues
+        The spaces are missing
+        Word wrap is not working
+            Could actually have word wrap as a function instead of being in main
+Word Wrap Pseudo code
+    Takes in vector and window and returns nothing
+        But it prints the words in the borders of the window
+Thanks to Mr. Carter I was able to fix the problem of not outputting spaces
+Was able to get word wrap working but it is not in a function of itself yet
+Vertical Scrolling(in the future)
+    For now it takes in a char and prints the next line of text
